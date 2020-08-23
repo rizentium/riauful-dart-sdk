@@ -1,0 +1,15 @@
+name: riauful_sdk
+version: 0.0.1-dev
+author: rizentium <rizentium@gmail.com>
+homepage: https://github.com/rizentium/riauful_dart
+description: Unofficial Riau Dart Plugin
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  # This is a pure Dart HTML5 parser. It's a port of html5lib from Python.
+  html: ^0.14.0+3
+  # A composable, Future-based library for making HTTP requests.
+  http: ^0.12.2
+dev_dependencies:
+  test: ^1.15.3

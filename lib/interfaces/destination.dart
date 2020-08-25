@@ -5,6 +5,8 @@ class RiauDestination {
   final String address;
   final String thumbnail;
   final String category;
+  final List<Object> description;
+  final List<Object> detail;
 
   RiauDestination({
     this.id,
@@ -13,6 +15,8 @@ class RiauDestination {
     this.address,
     this.thumbnail,
     this.category,
+    this.description,
+    this.detail,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +27,8 @@ class RiauDestination {
       'address': address,
       'thumbnail': thumbnail,
       'category': category,
+      'description': description,
+      'detail': detail,
     };
   }
 
@@ -32,5 +38,7 @@ class RiauDestination {
         location = payload['location'],
         address = payload['address'],
         thumbnail = payload['thumbnail'],
-        category = payload['category'];
+        category = payload['category'],
+        description = payload['description'],
+        detail = payload['detail'];
 }

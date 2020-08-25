@@ -40,4 +40,62 @@ class Destination {
       return err;
     }
   }
+
+  Future<RiauDestination> find(String url) async {
+    try {
+      Response response = await _client.get(url);
+
+      var document = parse(response.body);
+
+      var detail = document
+          .getElementById('venue')
+          .querySelector('div > table > tbody')
+          .children
+          .where((data) => data.children.length > 1)
+          .toList()
+          .map((f) => {
+                'title': f.children[0].text.trim(),
+                'desc': f.children[1].text
+                    .replaceAll(':', '')
+                    .replaceAll('•', '')
+                    .trim()
+              })
+          .toList();
+
+      var description = document
+          .querySelector('.listing-details-info > table > tbody')
+          .children
+          .map((f) => {
+                'title': f.children[0].text.trim(),
+                'desc': f.children[1].text
+                    .replaceAll(':', '')
+                    .replaceAll('•', '')
+                    .trim()
+              })
+          .toList();
+
+      return RiauDestination(
+          id: url,
+          name: document.querySelector('.item-title').text.trim(),
+          location: detail.where((r) => r['title'] == 'Alamat').first['desc'],
+          address: detail
+              .where((r) => r['title'] == 'Desa' || r['title'] == 'Alamat')
+              .map((f) => f['desc'])
+              .join(', '),
+          thumbnail: '$_host/' +
+              document
+                  .getElementById('layout-content')
+                  .children
+                  .where((f) => f.attributes['property'] != null)
+                  .first
+                  .attributes['content'],
+          category: description
+              .where((test) => test['title'] == 'Jenis Atraksi')
+              .first['desc'],
+          description: description,
+          detail: detail);
+    } catch (err) {
+      return err;
+    }
+  }
 }

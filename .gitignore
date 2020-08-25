@@ -31,3 +31,8 @@
 .pub/
 build/
 bin/*
+
+# test_coverage related
+coverage/
+test/.test_coverage.dart
+coverage_badge.svg

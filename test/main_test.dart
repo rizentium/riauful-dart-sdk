@@ -3,10 +3,17 @@ import 'package:test/test.dart';
 
 void main() {
   group('Destination', () {
-    test('Get all destination', () {
+    test('Get all destination', () async {
       var riauful = new RiauFul();
+      var data = await riauful.destination.getOnPage(1);
 
-      expect(riauful.destination.all(), []);
+      data.forEach((f) {
+        expect(f.name, isNotEmpty);
+        expect(f.address, isNotEmpty);
+        expect(f.category, isNotEmpty);
+        expect(f.thumbnail, isNotEmpty);
+        expect(f.thumbnail, isNotEmpty);
+      });
     });
   });
 }

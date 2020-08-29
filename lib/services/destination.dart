@@ -8,12 +8,20 @@ class Destination {
   // Get all destination in Province of Riau
   Future<List<RiauDestination>> getOnPage(int page) async {
     try {
-      Response response = await _client.get('$_host/dataod.php');
+      Response response =
+          await _client.post('$_host/dataod.php', body: {'page': '$page'});
 
       var document = parse(response.body);
 
       List<RiauDestination> data =
           document.querySelectorAll('.product-box').map((f) {
+        var thumbnail = f
+            .querySelectorAll('div[style*="background-position: center;"]')
+            .first
+            .attributes['style']
+            .split(';')[0]
+            .replaceAll('background-image: url(', '')
+            .replaceAll(')', '');
         return RiauDestination(
           id: '$_host/' +
               f
@@ -23,15 +31,7 @@ class Destination {
           name: f.querySelector('.item-title').text.trim(),
           location: f.querySelector('.item-status').text.trim(),
           address: f.querySelector('.contact-info').children[2].text.trim(),
-          thumbnail: '$_host/' +
-              f
-                  .querySelectorAll(
-                      'div[style*="background-position: center;"]')
-                  .first
-                  .attributes['style']
-                  .split(';')[0]
-                  .replaceAll('background-image: url(', '')
-                  .replaceAll(')', ''),
+          thumbnail: thumbnail != 'imgee/uploads/' ? '$_host/' + thumbnail : '',
           category: f.querySelector('.btn-category').text.trim(),
         );
       }).toList();
@@ -74,6 +74,13 @@ class Destination {
               })
           .toList();
 
+      var thumbnail = document
+          .getElementById('layout-content')
+          .children
+          .where((f) => f.attributes['property'] != null)
+          .first
+          .attributes['content'];
+
       return RiauDestination(
           id: url,
           name: document.querySelector('.item-title').text.trim(),
@@ -82,13 +89,7 @@ class Destination {
               .where((r) => r['title'] == 'Desa' || r['title'] == 'Alamat')
               .map((f) => f['desc'])
               .join(', '),
-          thumbnail: '$_host/' +
-              document
-                  .getElementById('layout-content')
-                  .children
-                  .where((f) => f.attributes['property'] != null)
-                  .first
-                  .attributes['content'],
+          thumbnail: thumbnail != 'imgee/uploads/' ? '$_host/' + thumbnail : '',
           category: description
               .where((test) => test['title'] == 'Jenis Atraksi')
               .first['desc'],

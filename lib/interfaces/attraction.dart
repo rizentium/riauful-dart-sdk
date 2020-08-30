@@ -1,4 +1,6 @@
-class RiauDestination {
+enum AttractionCategory { nature, artificial, culture }
+
+class AttractionInterface {
   final String id;
   final String name;
   final String location;
@@ -8,7 +10,7 @@ class RiauDestination {
   final List<Object> description;
   final List<Object> detail;
 
-  RiauDestination({
+  AttractionInterface({
     this.id,
     this.name,
     this.location,
@@ -32,7 +34,7 @@ class RiauDestination {
     };
   }
 
-  RiauDestination.fromJSON(Map<String, dynamic> payload)
+  AttractionInterface.fromJSON(Map<String, dynamic> payload)
       : id = payload['id'],
         name = payload['name'],
         location = payload['location'],

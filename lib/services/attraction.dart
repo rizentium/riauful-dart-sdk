@@ -176,4 +176,15 @@ class Attraction {
       return err;
     }
   }
+
+  Future<List<AttractionInterface>> findAllByPlaces(List<String> places) async {
+    try {
+      var data = (await this.all())
+          .where((test) => places.contains(test.location))
+          .toList();
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
 }

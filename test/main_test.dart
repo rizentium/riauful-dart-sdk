@@ -115,5 +115,16 @@ void main() {
         });
       });
     });
+    test('Get attractions by place', () async {
+      riauful.attraction.getPlaces().then((places) {
+        places.forEach((f) async {
+          var result = await riauful.attraction.findAllByPlaces([f]);
+
+          result.forEach((attraction) {
+            expect(f, attraction.location);
+          });
+        });
+      });
+    });
   });
 }

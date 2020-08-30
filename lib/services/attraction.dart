@@ -6,6 +6,19 @@ class Attraction {
   final _client = new Client();
   final _host = 'https://destinasiriau.travel';
   // Get all destination in Province of Riau
+  Future<List<AttractionInterface>> all() async {
+    try {
+      List<AttractionInterface> data = [];
+      data.addAll(await this.findAllByCategory(AttractionCategory.artificial));
+      data.addAll(await this.findAllByCategory(AttractionCategory.culture));
+      data.addAll(await this.findAllByCategory(AttractionCategory.nature));
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  // Get all destination in Province of Riau using pagination
   Future<List<AttractionInterface>> getOnPage(int page) async {
     try {
       Response response =

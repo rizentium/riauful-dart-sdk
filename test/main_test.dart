@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   var riauful = new RiauFul();
   group('Attraction', () {
-    test('Get all attractions', () async {
+    test('Get all attractions using pagination', () async {
       var pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
       pages.forEach((f) async {
@@ -72,6 +72,25 @@ void main() {
       riauful.attraction
           .findAllByCategory(AttractionCategory.nature)
           .then((artificail) {
+        artificail.forEach((f) async {
+          expect(f.name, isNotEmpty);
+          expect(f.location, isNotEmpty);
+          expect(f.category, isNotEmpty);
+
+          var result = await riauful.attraction.find(f.id);
+          expect(result.name, isNotEmpty);
+          expect(result.location, isNotEmpty);
+          expect(result.address, isNotEmpty);
+          expect(result.category, isNotEmpty);
+          expect(result.thumbnail, isNotEmpty);
+          expect(result.description.length > 0, true);
+          expect(result.detail.length > 0, true);
+        });
+      });
+    });
+
+    test('Get attractions', () {
+      riauful.attraction.all().then((artificail) {
         artificail.forEach((f) async {
           expect(f.name, isNotEmpty);
           expect(f.location, isNotEmpty);

@@ -107,5 +107,13 @@ void main() {
         });
       });
     });
+    test('Get all places', () {
+      riauful.attraction.getPlaces().then((data) {
+        data.forEach((f) {
+          expect(f, isNotNull);
+          expect(f, isNotEmpty);
+        });
+      });
+    });
   });
 }

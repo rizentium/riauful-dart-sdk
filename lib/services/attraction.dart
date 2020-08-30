@@ -161,4 +161,19 @@ class Attraction {
       return err;
     }
   }
+
+  Future<List<String>> getPlaces() async {
+    try {
+      Response response = await _client.get(this._host);
+
+      var document = parse(response.body);
+
+      return document
+          .querySelectorAll('.dropdown-menu-col-1 > li')
+          .map((f) => f.text.trim())
+          .toList();
+    } catch (err) {
+      return err;
+    }
+  }
 }

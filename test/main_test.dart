@@ -126,5 +126,24 @@ void main() {
         });
       });
     });
+
+    test('Get recommendations', () {
+      riauful.attraction.getRecommendations(10).then((artificail) {
+        artificail.forEach((f) async {
+          expect(f.name, isNotEmpty);
+          expect(f.location, isNotEmpty);
+          expect(f.category, isNotEmpty);
+
+          var result = await riauful.attraction.find(f.id);
+          expect(result.name, isNotEmpty);
+          expect(result.location, isNotEmpty);
+          expect(result.address, isNotEmpty);
+          expect(result.category, isNotEmpty);
+          expect(result.thumbnail, isNotEmpty);
+          expect(result.description.length > 0, true);
+          expect(result.detail.length > 0, true);
+        });
+      });
+    });
   });
 }

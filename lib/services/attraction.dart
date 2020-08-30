@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:riauful_sdk/interfaces/attraction.dart';
@@ -49,53 +51,6 @@ class Attraction {
           category: f.querySelector('.btn-category').text.trim(),
         );
       }).toList();
-      return data;
-    } catch (err) {
-      return err;
-    }
-  }
-
-  Future<List<AttractionInterface>> findAllByCategory(
-    AttractionCategory category,
-  ) async {
-    try {
-      Response response;
-
-      switch (category) {
-        case AttractionCategory.artificial:
-          response = await _client.post('$_host/kategori-Buatan');
-          break;
-        case AttractionCategory.culture:
-          response = await _client.post('$_host/kategori-Budaya');
-          break;
-        case AttractionCategory.nature:
-          response = await _client.post('$_host/kategori-Alam');
-          break;
-        default:
-          break;
-      }
-
-      var document = parse(response.body);
-
-      var data = document.querySelectorAll('.product-box').map((f) {
-        var thumbnail = f
-            .querySelector('div[style*="background-position: center;"]')
-            .attributes['style']
-            .split(';')[0]
-            .replaceAll('background-image: url(', '')
-            .replaceAll(')', '');
-        var address = f.querySelector('.contact-info').children[2].text.trim();
-        return AttractionInterface(
-          id: '$_host/' + f.querySelector('.item-title > a').attributes['href'],
-          name: f.querySelector('.item-title').text.trim(),
-          category: f.querySelector('.btn-category').text.trim(),
-          location: f.querySelector('.contact-info').children[1].text.trim(),
-          address: address != '-' ? address : null,
-          thumbnail:
-              thumbnail != 'imgee/uploads/' ? '$_host/' + thumbnail : null,
-        );
-      }).toList();
-
       return data;
     } catch (err) {
       return err;
@@ -162,6 +117,63 @@ class Attraction {
     }
   }
 
+  Future<List<AttractionInterface>> findAllByCategory(
+      AttractionCategory category) async {
+    try {
+      Response response;
+
+      switch (category) {
+        case AttractionCategory.artificial:
+          response = await _client.post('$_host/kategori-Buatan');
+          break;
+        case AttractionCategory.culture:
+          response = await _client.post('$_host/kategori-Budaya');
+          break;
+        case AttractionCategory.nature:
+          response = await _client.post('$_host/kategori-Alam');
+          break;
+        default:
+          break;
+      }
+
+      var document = parse(response.body);
+
+      var data = document.querySelectorAll('.product-box').map((f) {
+        var thumbnail = f
+            .querySelector('div[style*="background-position: center;"]')
+            .attributes['style']
+            .split(';')[0]
+            .replaceAll('background-image: url(', '')
+            .replaceAll(')', '');
+        var address = f.querySelector('.contact-info').children[2].text.trim();
+        return AttractionInterface(
+          id: '$_host/' + f.querySelector('.item-title > a').attributes['href'],
+          name: f.querySelector('.item-title').text.trim(),
+          category: f.querySelector('.btn-category').text.trim(),
+          location: f.querySelector('.contact-info').children[1].text.trim(),
+          address: address != '-' ? address : null,
+          thumbnail:
+              thumbnail != 'imgee/uploads/' ? '$_host/' + thumbnail : null,
+        );
+      }).toList();
+
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  Future<List<AttractionInterface>> findAllByPlaces(List<String> places) async {
+    try {
+      var data = (await this.all())
+          .where((test) => places.contains(test.location))
+          .toList();
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+
   Future<List<String>> getPlaces() async {
     try {
       Response response = await _client.get(this._host);
@@ -177,12 +189,17 @@ class Attraction {
     }
   }
 
-  Future<List<AttractionInterface>> findAllByPlaces(List<String> places) async {
+  Future<List<AttractionInterface>> getRecommendations(int length) async {
     try {
-      var data = (await this.all())
-          .where((test) => places.contains(test.location))
-          .toList();
-      return data;
+      var data = await this.all();
+      List<AttractionInterface> result = [];
+
+      var randomize = new Random();
+      for (var i = 0; i < length; i++) {
+        result.add(data[randomize.nextInt(data.length)]);
+      }
+
+      return result;
     } catch (err) {
       return err;
     }

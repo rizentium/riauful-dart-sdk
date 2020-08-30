@@ -1,7 +1,7 @@
 library riauful_sdk;
 
-import 'package:riauful_sdk/services/destination.dart';
+import 'package:riauful_sdk/services/attraction.dart';
 
 class RiauFul {
-  final Destination destination = new Destination();
+  final Attraction attraction = new Attraction();
 }

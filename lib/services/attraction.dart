@@ -16,7 +16,7 @@ class Attraction {
       data.addAll(await this.findAllByCategory(AttractionCategory.nature));
       return data;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -53,7 +53,7 @@ class Attraction {
       }).toList();
       return data;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -113,7 +113,7 @@ class Attraction {
           description: description,
           detail: detail);
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -159,7 +159,7 @@ class Attraction {
 
       return data;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -170,7 +170,7 @@ class Attraction {
           .toList();
       return data;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -185,7 +185,7 @@ class Attraction {
           .map((f) => f.text.trim())
           .toList();
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -201,7 +201,7 @@ class Attraction {
 
       return result;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 }
